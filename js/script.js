@@ -39,14 +39,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
         loaderWrapper.style.display = "none"
-    }, 1500)
+    }, 500)
 
     // Timer
     const deadline = "2024-04-01"
 
     function getTimeRemaining(deadline) {
         let days, hours, minutes, seconds
-        const time = Date.parse(deadline) - Date.parse(new Date())
+        const now = String(new Date())
+        const time = Date.parse(deadline) - Date.parse(now)
 
         if (time <= 0) {
             days = 0
@@ -98,6 +99,45 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+
+    // Modal
+    const modalOpenBtns = document.querySelectorAll("[data-modal]"),
+        modal = document.querySelector(".modal"),
+        modalCloseBtn = document.querySelector("[data-modal-close]")
+
+    function openModal() {
+        modal.classList.add("show", "fade")
+        modal.classList.remove("hide")
+        document.body.style.overflow = "hidden"
+        clearTimeout(modalTimerId)
+    }
+
+    function closeModal() {
+        modal.classList.add("hide")
+        modal.classList.remove("show")
+        document.body.style.overflow = ""
+        clearTimeout(modalTimerId)
+    }
+
+    modalOpenBtns.forEach(btn => {
+        btn.addEventListener("click", openModal)
+    })
+
+    modalCloseBtn.addEventListener("click", closeModal)
+
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal()
+        }
+    })
+
+    document.addEventListener("keydown", (event) => {
+        if (event.code === "Escape" && modal.classList.contains("show")) {
+            closeModal()
+        }
+    })
+
+    const modalTimerId = setTimeout(openModal, 6000)
 
     // Todo: Call Functions
     hideTabContents()

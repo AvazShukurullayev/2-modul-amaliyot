@@ -8,7 +8,7 @@
     <title>Food Lover</title>
     <!-- Style Link -->
     <link rel="stylesheet" href="./style.css">
-    <!-- Fontawsome -->
+    <!-- Fontawesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
           integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -27,7 +27,7 @@
         <img src="./img/logo.png" alt="Food Lover Logo">
         <nav role="navigation">
             <ul>
-                <li><a href="#home">Home</a></li>
+                <li><a href="#">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#menu">Menu</a></li>
                 <li><a href="#gallery">Gallery</a></li>
@@ -40,7 +40,7 @@
         <p>Here you can find Most delicacies food in the world</p>
         <div class="btn__group">
             <button class="button arrow">Read more</button>
-            <button class="button phone">Contact Us</button>
+            <button data-modal class="button phone">Contact Us</button>
         </div>
     </div>
 </header>
@@ -290,7 +290,7 @@
             <div style="display: flex; justify-content: center;">
                 <div class="btn__group">
                     <button class="button arrow">Read more</button>
-                    <button class="button phone">Contact Us</button>
+                    <button data-modal class="button phone">Contact Us</button>
                 </div>
             </div>
         </div>
@@ -365,7 +365,7 @@
                             saepe non
                             ab placeat fugiat?
                         </p>
-                        <button class="btn btn-third"><a href="#">CONTACT</a></button>
+                        <button data-modal class="button phone">Contact Us</button>
                     </div>
                 </div>
             </div>
@@ -427,12 +427,12 @@
     <div class="modal__dialog">
         <div class="modal__content">
             <form action="#">
-                <div class="modal__close">&times;</div>
+                <div data-modal-close class="modal__close">&times;</div>
                 <div class="modal__title">
                     Contact Us!
                 </div>
                 <input required placeholder="Full Name" name="name" type="text" class="modal__input"/>
-                <input required placeholder="Phone Number" name="phone" type="phone" class="modal__input"/>
+                <input required placeholder="Phone Number" name="phone" type="text" class="modal__input"/>
                 <button class="btn btn-third">Contact Us</button>
             </form>
         </div>
