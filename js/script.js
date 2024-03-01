@@ -16,7 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     function showTabContent(index = 0) {
-        tabContents[index].classList.add("show","fade")
+        tabContents[index].classList.add("show", "fade")
         tabContents[index].classList.remove("hide")
         tabs[index].classList.add("tabheader__item_active")
     }
@@ -33,6 +33,13 @@ window.addEventListener("DOMContentLoaded", () => {
             })
         }
     })
+
+    // Loader
+    const loaderWrapper = document.querySelector(".loader-wrapper")
+
+    setTimeout(() => {
+        loaderWrapper.style.display = "none"
+    }, 1500)
 
     // Todo: Call Functions
     hideTabContents()
