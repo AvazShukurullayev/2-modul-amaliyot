@@ -139,6 +139,129 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const modalTimerId = setTimeout(openModal, 6000)
 
+    // Class Offer Menu
+    class OfferMenu {
+        constructor(src, alt, title, description, discount, sale, parentSelector) {
+            this.src = src
+            this.alt = alt
+            this.title = title
+            this.description = description
+            this.discount = discount
+            this.sale = sale
+            this.parent = document.querySelector(parentSelector)
+            this.formatToUSD()
+        }
+
+        formatToUSD() {
+            this.discount = this.discount.toLocaleString("en-US", {style: "currency", currency: "USD"})
+            this.sale = this.sale.toLocaleString("en-US", {style: "currency", currency: "USD"})
+        }
+
+        render() {
+            // nimadurni website qoyib qoyamiz
+            const element = document.createElement("div")
+            element.innerHTML = `
+              <img src=${this.src} alt=${this.alt}>
+                 <div>
+                    <h3>${this.title}</h3>
+                    <p>${this.description}</p>
+                    <p>
+                        <del>${this.discount}</del>
+                        <span class="primary-text">${this.sale}</span>
+                    </p>
+                 </div>
+            `
+
+            this.parent.append(element)
+        }
+    }
+
+    const offers = [
+        {
+            src: "./img/offer1.png",
+            alt: "Quattro Pasta",
+            title: "Quattro Pasta",
+            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
+            discount: 50,
+            sale: 20
+        },
+        {
+            src: "./img/offer2.png",
+            alt: "Vegertarian Pasta",
+            title: "Vegertarian Pasta",
+            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
+            discount: 65,
+            sale: 25
+        },
+        {
+            src: "./img/offer3.png",
+            alt: "Gluten-Free Pasta",
+            title: "Gluten-Free Pasta",
+            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
+            discount: 75,
+            sale: 10
+        }
+    ]
+
+    offers.forEach(offer => {
+        const {src, alt, title, description, discount, sale} = offer
+        new OfferMenu(src, alt, title, description, discount, sale, ".offers-items").render()
+    })
+
+    // CLass Eating Time
+    class EatingTime {
+        constructor(src, alt, title, time, parentSelector) {
+            this.src = src
+            this.alt = alt
+            this.title = title
+            this.time = time
+            this.parent = document.querySelector(parentSelector)
+        }
+
+        render() {
+            const element = document.createElement("div")
+            element.classList.add("daytime-item")
+            element.innerHTML = `
+                <img src=${this.src} alt=${this.alt}>
+                <h3>${this.title}</h3>
+                <p>${this.time}</p>
+            `
+            this.parent.append(element)
+        }
+    }
+
+    const eating = [
+        {
+            src: "./img/breckfastIcon.png",
+            alt: "Breakfast",
+            title: "Breakfast",
+            time: "8:00 am to 10:00 am"
+        },
+        {
+            src: "./img/lunchIcon.png",
+            alt: "Lunch",
+            title: "Lunch",
+            time: "4:00 pm to 7:00 pm"
+        },
+        {
+            src: "./img/dinnerIcon.png",
+            alt: "Dinner",
+            title: "Dinner",
+            time: "9:00 pm to 01:00 am"
+        },
+        {
+            src: "./img/dessertIcon.png",
+            alt: "dessert",
+            title: "Dessert",
+            time: "All day"
+        },
+    ]
+
+    eating.forEach(item => {
+        const {src, alt, title, time} = item
+        new EatingTime(src, alt, title, time, ".daytime-items").render()
+    })
+
     // Todo: Call Functions
     hideTabContents()
     showTabContent()
