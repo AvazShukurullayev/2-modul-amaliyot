@@ -126,7 +126,8 @@ header * {
 
 /* About Start */
 #about {
-    height: 80vh;
+    /*height: 80vh;*/
+    padding: 20px 0;
     background: #f4f4f4;
     display: flex;
     justify-content: center;
@@ -181,7 +182,8 @@ header * {
 /* About End */
 /* Offers Section start */
 #offers {
-    height: 80vh;
+    /*height: 80vh;*/
+    padding: 20px 0;
     background: url('./img/offer-background.jpg') center center/cover fixed;
     display: flex;
     flex-direction: column;
@@ -936,7 +938,8 @@ form button {
     border: 5px solid #FFF;
     border-bottom-color: #FF3D00;
     border-radius: 50%;
-    display: inline-block;
+    display: block;
+    margin: 0 auto;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
 }
