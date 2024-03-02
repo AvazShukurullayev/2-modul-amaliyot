@@ -177,37 +177,19 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const offers = [
-        {
-            src: "./img/offer1.png",
-            alt: "Quattro Pasta",
-            title: "Quattro Pasta",
-            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
-            discount: 50,
-            sale: 20
-        },
-        {
-            src: "./img/offer2.png",
-            alt: "Vegertarian Pasta",
-            title: "Vegertarian Pasta",
-            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
-            discount: 65,
-            sale: 25
-        },
-        {
-            src: "./img/offer3.png",
-            alt: "Gluten-Free Pasta",
-            title: "Gluten-Free Pasta",
-            description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam, quibusdam.",
-            discount: 75,
-            sale: 10
-        }
-    ]
-
-    offers.forEach(offer => {
-        const {src, alt, title, description, discount, sale} = offer
-        new OfferMenu(src, alt, title, description, discount, sale, ".offers-items").render()
+    fetch("http://localhost:3000/offers", {
+        method: "GET",
+        headers: {"Content-Type": "application/json"}
     })
+        .then((response) => response.json())
+        .then((data) => {
+            data.forEach(offer => {
+                const {src, alt, title, description, discount, sale} = offer
+                new OfferMenu(src, alt, title, description, discount, sale, ".offers-items").render()
+            })
+        })
+        .catch((err) => console.log(err))
+        .finally(() => console.log("Finally offers"))
 
     // CLass Eating Time
     class EatingTime {
@@ -231,38 +213,68 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const eating = [
-        {
-            src: "./img/breckfastIcon.png",
-            alt: "Breakfast",
-            title: "Breakfast",
-            time: "8:00 am to 10:00 am"
-        },
-        {
-            src: "./img/lunchIcon.png",
-            alt: "Lunch",
-            title: "Lunch",
-            time: "4:00 pm to 7:00 pm"
-        },
-        {
-            src: "./img/dinnerIcon.png",
-            alt: "Dinner",
-            title: "Dinner",
-            time: "9:00 pm to 01:00 am"
-        },
-        {
-            src: "./img/dessertIcon.png",
-            alt: "dessert",
-            title: "Dessert",
-            time: "All day"
-        },
-    ]
-
-    eating.forEach(item => {
-        const {src, alt, title, time} = item
-        new EatingTime(src, alt, title, time, ".daytime-items").render()
+    fetch("http://localhost:3000/eating", {
+        method: "GET",
+        headers: {"Content-Type": "application/json"}
     })
+        .then((response) => response.json())
+        .then((data) => {
+            data.forEach(item => {
+                const {src, alt, title, time} = item
+                new EatingTime(src, alt, title, time, ".daytime-items").render()
+            })
+        })
+        .catch((err) => console.log(err))
+        .finally(() => console.log("Finally eating"))
 
+    // Class specialMenu
+    class Specials {
+        constructor(src, alt, title, price, description, parentSelector) {
+            this.src = src
+            this.alt = alt
+            this.title = title
+            this.price = price
+            this.description = description
+            this.parent = document.querySelector(parentSelector)
+            this.convertToUSD()
+        }
+
+        convertToUSD() {
+            this.price = this.price.toLocaleString("en-US", {style: "currency", currency: "USD"})
+        }
+
+        render() {
+            const element = document.createElement("div")
+            element.classList.add("menu-item")
+            element.innerHTML = `
+                <img src=${this.src} alt=${this.alt}>
+                <div>
+                    <h3>${this.title} <span class="primary-text">${this.price}</span></h3>
+                    <p>${this.description}</p>
+                </div>
+            `
+            this.parent.append(element)
+        }
+    }
+
+    function fetchSpecials(url, parentSelector) {
+        fetch(url, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                data.forEach(item => {
+                    const {src, alt, title, price, description} = item
+                    new Specials(src, alt, title, price, description, parentSelector).render()
+                })
+            })
+            .catch((err) => console.log(err))
+            .finally(() => console.log("Finally Specials"))
+    }
+
+    fetchSpecials("http://localhost:3000/leftFoods", ".menu-items-left")
+    fetchSpecials("http://localhost:3000/rightFood", ".menu-items-right")
     // Form
     const form = document.querySelector("form"),
         telegramBotToken = "7019010563:AAFdy3Z56hkrcUT5xUb8I2KaE-h-cDDf_Ew",
