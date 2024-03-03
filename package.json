@@ -12,6 +12,9 @@
     "json-server": "^1.0.0-alpha.23"
   },
   "devDependencies": {
-    "eslint": "^8.57.0"
-  }
+    "eslint": "^8.57.0",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "keywords": []
 }
