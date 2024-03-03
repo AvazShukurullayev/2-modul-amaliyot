@@ -339,7 +339,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // Slider
-    const slides = document.querySelectorAll(".offer__slide"),
+    /*const slides = document.querySelectorAll(".offer__slide"),
         prev = document.querySelector(".offer__slider-prev"),
         next = document.querySelector(".offer__slider-next"),
         currentSlide = document.querySelector("#current"),
@@ -349,8 +349,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (slides.length < 10) {
         totalSlides.textContent = `0${slides.length}`
+        currentSlide.textContent = `0${slideIndex}`
     } else {
-        totalSlides.textContent = slides.length
+        totalSlides.textContent = `${slides.length}`
+        currentSlide.textContent = slideIndex
     }
 
     function showSlides(index) {
@@ -372,7 +374,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function moveSlides(index) {
         showSlides(slideIndex += index)
-        currentSlide.textContent = formatSlide(slideIndex += index)
     }
 
     next.addEventListener("click", () => {
@@ -383,10 +384,85 @@ window.addEventListener("DOMContentLoaded", () => {
         moveSlides(-1)
     })
 
+    showSlides(slideIndex)*/
+
+    // Carousel
+    const slides = document.querySelectorAll(".offer__slide"),
+        prev = document.querySelector(".offer__slider-prev"),
+        next = document.querySelector(".offer__slider-next"),
+        currentSlide = document.querySelector("#current"),
+        totalSlides = document.querySelector("#total"),
+        slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+        slidesInner = document.querySelector(".offer__slider-inner"),
+        width = window.getComputedStyle(slidesWrapper).width
+
+    let slideIndex = 1,
+        offset = 0
+
+    if (slides.length < 10) {
+        totalSlides.textContent = `0${slides.length}`
+        currentSlide.textContent = `0${slideIndex}`
+    } else {
+        totalSlides.textContent = `${slides.length}`
+        currentSlide.textContent = slideIndex
+    }
+
+    slidesInner.style.width = 100 * slides.length + "%"
+    slidesInner.style.display = "flex"
+    slidesInner.style.transition = "all 0.5s ease"
+    slidesWrapper.style.overflow = "hidden"
+
+    slides.forEach((slide) => {
+        slide.style.width = width
+    })
+
+    next.addEventListener("click", (event) => {
+        //Todo: shetta logikasiga yaxshi tushunmadim
+        if (offset === +width.slice(0, width.length - 2) * (slides.length - 1)) {
+            offset = 0
+        } else {
+            offset += +width.slice(0, width.length - 2)
+        }
+        slidesInner.style.transform = `translateX(-${offset}px)`
+
+        if (slideIndex === slides.length) {
+            slideIndex = 1
+        } else {
+            slideIndex++
+        }
+
+        if (slides.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`
+        } else {
+            currentSlide.textContent = `${slideIndex}`
+        }
+    })
+
+    prev.addEventListener("click", (event) => {
+        console.log("offset => ", offset)
+        // Todo: shetta prev logikasiga yaxshilab tushunib olishim kere
+        if (offset === 0) {
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1) // 9900 -990
+        } else {
+            offset -= +width.slice(0, width.length - 2)
+        }
+        slidesInner.style.transform = `translateX(-${offset}px)`
+
+        if (slideIndex === 1) {
+            slideIndex = slides.length
+        } else {
+            slideIndex--
+        }
+
+        if (slides.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`
+        } else {
+            currentSlide.textContent = `${slideIndex}`
+        }
+    })
 
     // Todo: Call Functions
     hideTabContents()
     showTabContent()
     setClock(".timer", deadline)
-    showSlides(slideIndex)
 })
