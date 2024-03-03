@@ -418,10 +418,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     next.addEventListener("click", (event) => {
         //Todo: shetta logikasiga yaxshi tushunmadim
-        if (offset === +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if (offset === +width.replace(/\D/g,"") * (slides.length - 1)) {
             offset = 0
         } else {
-            offset += +width.slice(0, width.length - 2)
+            offset += +width.replace(/\D/g,"")
         }
         slidesInner.style.transform = `translateX(-${offset}px)`
 
@@ -442,9 +442,9 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log("offset => ", offset)
         // Todo: shetta prev logikasiga yaxshilab tushunib olishim kere
         if (offset === 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1) // 9900 -990
+            offset = +width.replace(/\D/g,"") * (slides.length - 1) // 9900 -990
         } else {
-            offset -= +width.slice(0, width.length - 2)
+            offset -= +width.replace(/\D/g,"")
         }
         slidesInner.style.transform = `translateX(-${offset}px)`
 
