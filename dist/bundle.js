@@ -151,7 +151,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ formFunc)
 /* harmony export */ });
-function formFunc(formSelector) {
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal */ "./js/modules/modal.js");
+
+
+function formFunc(formSelector, modalSelector, modalTimerId) {
     // Form
     const form = document.querySelector(formSelector),
         telegramBotToken = "7019010563:AAFdy3Z56hkrcUT5xUb8I2KaE-h-cDDf_Ew",
@@ -161,6 +164,25 @@ function formFunc(formSelector) {
         loading: "Loading...",
         successful: "Thanks for contacting with us",
         failure: "Something went wrong"
+    }
+
+    async function sendMessage(loader, object) {
+        try {
+            await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: `Name: ${object.name}. Phone: +${object.phone}`
+                })
+            })
+            showStatusMessage(message.successful)
+        } catch (e) {
+            showStatusMessage(message.failure)
+        } finally {
+            form.reset()
+            loader.remove()
+        }
     }
 
     form.addEventListener("submit", (event) => {
@@ -176,8 +198,11 @@ function formFunc(formSelector) {
         formData.forEach((value, key) => object[key] = value)
         console.log(object)
 
+        // Async function fetch POST request
+        sendMessage(loader, object)
+
         // fetch POST request
-        fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        /*fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -192,14 +217,15 @@ function formFunc(formSelector) {
             .finally(() => {
                 form.reset()
                 loader.remove()
-            })
+            })*/
     })
+
 
     function showStatusMessage(message) {
         const modalDialog = document.querySelector(".modal__dialog")
 
         modalDialog.classList.add("hide")
-        openModal()
+        ;(0,_modal__WEBPACK_IMPORTED_MODULE_0__.openModal)(modalSelector, modalTimerId)
         const statusModal = document.createElement("div")
         statusModal.classList.add("modal__dialog")
         statusModal.innerHTML = `
@@ -213,7 +239,7 @@ function formFunc(formSelector) {
         setTimeout(() => {
             statusModal.remove()
             modalDialog.classList.remove("hide")
-            closeModal()
+            ;(0,_modal__WEBPACK_IMPORTED_MODULE_0__.closeModal)(modalSelector, modalTimerId)
         }, 4500)
     }
 }
@@ -253,25 +279,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   openModal: () => (/* binding */ openModal)
 /* harmony export */ });
-function openModal(modalSelector) {
+function openModal(modalSelector, modalTimerId) {
     const modal = document.querySelector(modalSelector)
-
     modal.classList.add("show", "fade")
     modal.classList.remove("hide")
     document.body.style.overflow = "hidden"
     clearTimeout(modalTimerId)
 }
 
-function closeModal(modalSelector) {
+function closeModal(modalSelector, modalTimerId) {
     const modal = document.querySelector(modalSelector)
-
     modal.classList.add("hide")
     modal.classList.remove("show")
     document.body.style.overflow = ""
     clearTimeout(modalTimerId)
 }
 
-function modalFunc(modalOpenBtnsSelector, modalSelector) {
+function modalFunc(modalOpenBtnsSelector, modalSelector, modalTimerId) {
     // Modal
     const modalOpenBtns = document.querySelectorAll(modalOpenBtnsSelector),
         modal = document.querySelector(modalSelector)
@@ -279,24 +303,22 @@ function modalFunc(modalOpenBtnsSelector, modalSelector) {
     // modalCloseBtn = document.querySelector("[data-modal-close]")
 
     modalOpenBtns.forEach(btn => {
-        btn.addEventListener("click", () => openModal(modalSelector))
+        btn.addEventListener("click", () => openModal(modalSelector, modalTimerId))
     })
 
     // modalCloseBtn.addEventListener("click", closeModal)
 
     modal.addEventListener("click", (event) => {
         if (event.target === modal || event.target.getAttribute("data-modal-close") === "") {
-            closeModal(modalSelector)
+            closeModal(modalSelector, modalTimerId)
         }
     })
 
     document.addEventListener("keydown", (event) => {
         if (event.code === "Escape" && modal.classList.contains("show")) {
-            closeModal(modalSelector)
+            closeModal(modalSelector, modalTimerId)
         }
     })
-
-    const modalTimerId = setTimeout(() => openModal(modalSelector), 600000)
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modalFunc);
@@ -356,15 +378,13 @@ function offerFunc(url, offerSelector) {
     }
 
     // getResources
-    // getResources()
+    // getResources(url)
     //     .then((data) => {
-    //     data.forEach(offer => {
-    //         const {src, alt, title, description, discount, sale} = offer
-    //         new OfferMenu(src, alt, title, description, discount, sale, offerSelector).render()
+    //         data.forEach(offer => {
+    //             const {src, alt, title, description, discount, sale} = offer
+    //             new OfferMenu(src, alt, title, description, discount, sale, offerSelector).render()
+    //         })
     //     })
-    // })
-    //     .catch((err) => console.log(err))
-    //     .finally(() => console.log("Finally offers"))
 
     fetch(url, {
         method: "GET",
@@ -579,9 +599,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ getResources)
 /* harmony export */ });
-async function getResources() {
+async function getResources(url) {
     try {
-        const response = await fetch("http://localhost:3000/offers")
+        const response = await fetch(url)
         return await response.json()
     } catch (e) {
         console.log("Error => ", e)
@@ -677,15 +697,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.addEventListener("DOMContentLoaded", () => {
-    const modalTimerId = setTimeout(openModalFunc, 600000)
+    const modalTimerId = setTimeout(() => (0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__.openModal)(".modal", modalTimerId), 600000)
     ;(0,_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])(".tabheader__item", ".tabheader__items", ".tab_content")
     ;(0,_modules_loader__WEBPACK_IMPORTED_MODULE_1__["default"])(".loader-wrapper")
     ;(0,_modules_timer__WEBPACK_IMPORTED_MODULE_2__["default"])("2024-04-01", ".timer")
-    ;(0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__["default"])("[data-modal]", ".modal")
+    ;(0,_modules_modal__WEBPACK_IMPORTED_MODULE_3__["default"])("[data-modal]", ".modal", modalTimerId)
     ;(0,_modules_offer__WEBPACK_IMPORTED_MODULE_4__["default"])("http://localhost:3000/offers", ".offers-items")
     ;(0,_modules_eating__WEBPACK_IMPORTED_MODULE_5__["default"])("http://localhost:3000/eating", ".daytime-items")
     ;(0,_modules_special__WEBPACK_IMPORTED_MODULE_6__["default"])("http://localhost:3000/leftFoods", "http://localhost:3000/rightFood", ".menu-items-left", ".menu-items-right")
-    ;(0,_modules_form__WEBPACK_IMPORTED_MODULE_7__["default"])("form")
+    ;(0,_modules_form__WEBPACK_IMPORTED_MODULE_7__["default"])("form", ".modal", modalTimerId)
     // sliderFunc()
     ;(0,_modules_carousel__WEBPACK_IMPORTED_MODULE_8__["default"])(".offer__slide", ".offer__slider-prev", ".offer__slider-next", "#current", "#total", ".offer__slider-wrapper", ".offer__slider-inner")
 })

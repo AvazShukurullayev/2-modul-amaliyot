@@ -1,6 +1,6 @@
-export default async function getResources() {
+export default async function getResources(url) {
     try {
-        const response = await fetch("http://localhost:3000/offers")
+        const response = await fetch(url)
         return await response.json()
     } catch (e) {
         console.log("Error => ", e)

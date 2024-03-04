@@ -39,15 +39,13 @@ export default function offerFunc(url, offerSelector) {
     }
 
     // getResources
-    // getResources()
+    // getResources(url)
     //     .then((data) => {
-    //     data.forEach(offer => {
-    //         const {src, alt, title, description, discount, sale} = offer
-    //         new OfferMenu(src, alt, title, description, discount, sale, offerSelector).render()
+    //         data.forEach(offer => {
+    //             const {src, alt, title, description, discount, sale} = offer
+    //             new OfferMenu(src, alt, title, description, discount, sale, offerSelector).render()
+    //         })
     //     })
-    // })
-    //     .catch((err) => console.log(err))
-    //     .finally(() => console.log("Finally offers"))
 
     fetch(url, {
         method: "GET",

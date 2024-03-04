@@ -1,4 +1,6 @@
-export default function formFunc(formSelector) {
+import {closeModal, openModal} from "./modal";
+
+export default function formFunc(formSelector, modalSelector, modalTimerId) {
     // Form
     const form = document.querySelector(formSelector),
         telegramBotToken = "7019010563:AAFdy3Z56hkrcUT5xUb8I2KaE-h-cDDf_Ew",
@@ -8,6 +10,25 @@ export default function formFunc(formSelector) {
         loading: "Loading...",
         successful: "Thanks for contacting with us",
         failure: "Something went wrong"
+    }
+
+    async function sendMessage(loader, object) {
+        try {
+            await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: `Name: ${object.name}. Phone: +${object.phone}`
+                })
+            })
+            showStatusMessage(message.successful)
+        } catch (e) {
+            showStatusMessage(message.failure)
+        } finally {
+            form.reset()
+            loader.remove()
+        }
     }
 
     form.addEventListener("submit", (event) => {
@@ -23,8 +44,11 @@ export default function formFunc(formSelector) {
         formData.forEach((value, key) => object[key] = value)
         console.log(object)
 
+        // Async function fetch POST request
+        sendMessage(loader, object)
+
         // fetch POST request
-        fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        /*fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -39,14 +63,15 @@ export default function formFunc(formSelector) {
             .finally(() => {
                 form.reset()
                 loader.remove()
-            })
+            })*/
     })
+
 
     function showStatusMessage(message) {
         const modalDialog = document.querySelector(".modal__dialog")
 
         modalDialog.classList.add("hide")
-        openModal()
+        openModal(modalSelector, modalTimerId)
         const statusModal = document.createElement("div")
         statusModal.classList.add("modal__dialog")
         statusModal.innerHTML = `
@@ -60,7 +85,7 @@ export default function formFunc(formSelector) {
         setTimeout(() => {
             statusModal.remove()
             modalDialog.classList.remove("hide")
-            closeModal()
+            closeModal(modalSelector, modalTimerId)
         }, 4500)
     }
 }
